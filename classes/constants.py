@@ -14,4 +14,11 @@ YELLOW = (255, 255, 0)
 GRAY = (100, 100, 100)
 BLACK = (0, 0, 0)
 
+# Game clock
+clock = pygame.time.Clock()
 
+# Create sprite groups
+all_sprites = pygame.sprite.Group()
+spells = pygame.sprite.Group()
+mobs = pygame.sprite.Group()
+wizard_group = pygame.sprite.Group()

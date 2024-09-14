@@ -19,22 +19,8 @@ WIDTH, HEIGHT = 32*32, 32*32
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Wizard vs Mobs")
 
-# Instantiate wizard
-        
-# Create sprite groups
-# Instantiate wizard
+
 wizard = Wizard(WIDTH, HEIGHT)
-
-
-# Game clock
-clock = pygame.time.Clock()
-
-# Create sprite groups
-all_sprites = pygame.sprite.Group()
-spells = pygame.sprite.Group()
-mobs = pygame.sprite.Group()
-wizard_group = pygame.sprite.Group()
-
 
 inventory = Inventory()
 wizard_group.add(wizard)
@@ -65,9 +51,7 @@ while running:
             if event.key == pygame.K_SPACE:
                 mouse_pos = pygame.mouse.get_pos()
                 selected_spell = hotbar.get_selected_spell()
-                spell = SpellFactory.create_spell(selected_spell, wizard.rect.centerx, wizard.rect.centery, mouse_pos)
-                all_sprites.add(spell)
-                spells.add(spell)
+                SpellFactory.create_spell(selected_spell, wizard.rect.centerx, wizard.rect.centery, mouse_pos)
 
             if pygame.key.get_pressed()[pygame.K_e]:
                 inventory_showing = not inventory_showing
