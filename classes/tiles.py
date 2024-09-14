@@ -6,6 +6,7 @@ from classes.constants import *
 class Tiles:
     def __init__(self, width, height):
         self.file = 'assets/gfx/cave.png'
+        
         self.tile_width = 32
         self.tileset = pygame.image.load(self.file)
         self.tilemap = [[random.randint(0, 4) for _ in range(width // self.tile_width)] for _ in range(height // self.tile_width)]

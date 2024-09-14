@@ -19,8 +19,22 @@ WIDTH, HEIGHT = 32*32, 32*32
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Wizard vs Mobs")
 
-
+# Instantiate wizard
+        
+# Create sprite groups
+# Instantiate wizard
 wizard = Wizard(WIDTH, HEIGHT)
+
+
+# Game clock
+# clock = pygame.time.Clock()
+
+# Create sprite groups
+# all_sprites = pygame.sprite.Group()
+# spells = pygame.sprite.Group()
+# mobs = pygame.sprite.Group()
+# wizard_group = pygame.sprite.Group()
+
 
 inventory = Inventory()
 wizard_group.add(wizard)
@@ -74,16 +88,19 @@ while running:
     mobs.update(wizard.rect.center)
 
     # Check for collisions between spells and mobs
-    hits = pygame.sprite.groupcollide(mobs, spells, False, False)
+    hits = pygame.sprite.groupcollide(mobs, spells, False, True)
     for mob in hits:
         mob.health -= 10
         if mob.health <= 0:
+            
+            shard = Shard()
+            shard.rect = mob.rect
+            
+            all_sprites.add(shard)
+            dropped_shards.add(shard)
             mob.kill()
-        
-        for hit_spell in hits[mob]:
-            hit_spell.update(hit=True)
 
-    # Check for collisions between the wizard and mobs
+    # Check for collisions between the wizard and mobs  
     mob_hits = pygame.sprite.groupcollide(wizard_group, mobs, False, True)
     for mob in mob_hits.get(wizard, []):
         wizard.health -= mob.power
@@ -92,6 +109,12 @@ while running:
         print("GAME OVER")
         running = False
 
+
+    pickups = pygame.sprite.groupcollide(wizard_group, dropped_shards, False, True)
+
+    for shard in pickups.get(wizard,[]):
+        inventory.add_shard(shard)
+        
     # Draw everything
     screen.fill(BLACK)
     tiles.draw_tiles(screen, offset_x, offset_y)
