@@ -1,13 +1,15 @@
 import pygame
 import random
 
-from wizard import Wizard
-from mob import MobFactory
-from spell import SpellFactory
-from hotbar import Hotbar
-from tiles import Tiles
-from utilities import get_camera_offset, draw_sprites, draw_healthbars
-from constants import *
+from classes.wizard import Wizard
+from classes.mob import MobFactory
+from classes.spell import SpellFactory
+from classes.hotbar import Hotbar
+from classes.tiles import Tiles
+from classes.utilities import get_camera_offset, draw_sprites, draw_healthbars
+from classes.constants import *
+from classes.inventory import Inventory
+from classes.items import Shard
 
 # Initialize Pygame
 pygame.init()
@@ -18,7 +20,23 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Wizard vs Mobs")
 
 # Instantiate wizard
+        
+# Create sprite groups
+# Instantiate wizard
 wizard = Wizard(WIDTH, HEIGHT)
+
+
+# Game clock
+clock = pygame.time.Clock()
+
+# Create sprite groups
+all_sprites = pygame.sprite.Group()
+spells = pygame.sprite.Group()
+mobs = pygame.sprite.Group()
+wizard_group = pygame.sprite.Group()
+
+
+inventory = Inventory()
 wizard_group.add(wizard)
 all_sprites.add(wizard)
 
@@ -30,6 +48,9 @@ hotbar = Hotbar()
 
 # Game loop
 running = True
+inventory_showing = False
+
+
 while running:
     clock.tick(60)
     for event in pygame.event.get():
@@ -48,8 +69,13 @@ while running:
                 all_sprites.add(spell)
                 spells.add(spell)
 
+            if pygame.key.get_pressed()[pygame.K_e]:
+                inventory_showing = not inventory_showing
+                
     offset_x, offset_y = get_camera_offset(screen, wizard)
 
+
+    
     # Spawn mobs randomly
     if random.randint(1, 100) < 3:
         mob = MobFactory.create_mob(random.choice(["fast", "strong", "normal"]))
@@ -87,6 +113,9 @@ while running:
 
     # Draw hotbar
     hotbar.draw(screen)
+
+    if inventory_showing:
+        inventory.draw(screen)
 
     pygame.display.flip()
 
