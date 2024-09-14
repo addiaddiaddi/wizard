@@ -8,7 +8,7 @@ class Spell(pygame.sprite.Sprite):
     def __init__(self, x, y, mouse_pos, speed=10, direction_offset=0, chain_explosion_types=None):
         super().__init__()
         self.image = pygame.Surface((10, 10))
-        self.image.fill(WHITE)
+        self.image.fill(random.choice([WHITE, RED, BLUE, GREEN, YELLOW, GRAY]))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.speed = speed
@@ -19,15 +19,15 @@ class Spell(pygame.sprite.Sprite):
 
         # spell properties
         self.distance_traveled = 0
-        self.explosion_threshold = 300
+        self.explosion_threshold = 200
         self.chain_explosion_types = chain_explosion_types or []
 
-    def update(self):
+    def update(self, hit=False):
         self.rect.x += self.velocity_x
         self.rect.y += self.velocity_y
         self.distance_traveled += self.speed
 
-        if len(self.chain_explosion_types) > 0 and self.distance_traveled >= self.explosion_threshold:
+        if len(self.chain_explosion_types) > 0 and (self.distance_traveled >= self.explosion_threshold or hit):
             SpellFactory.create_spell(
                 self.chain_explosion_types,
                 self.rect.centerx, self.rect.centery,

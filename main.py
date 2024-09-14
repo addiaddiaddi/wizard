@@ -74,11 +74,14 @@ while running:
     mobs.update(wizard.rect.center)
 
     # Check for collisions between spells and mobs
-    hits = pygame.sprite.groupcollide(mobs, spells, False, True)
+    hits = pygame.sprite.groupcollide(mobs, spells, False, False)
     for mob in hits:
         mob.health -= 10
         if mob.health <= 0:
             mob.kill()
+        
+        for hit_spell in hits[mob]:
+            hit_spell.update(hit=True)
 
     # Check for collisions between the wizard and mobs
     mob_hits = pygame.sprite.groupcollide(wizard_group, mobs, False, True)
