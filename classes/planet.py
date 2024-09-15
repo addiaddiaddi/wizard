@@ -18,7 +18,7 @@ biome_names = [
 
 class PlanetManager:
 
-    def __init__(self, player_x, player_y, initial_biome="forest"):
+    def __init__(self, player_x, player_y, initial_biome="nature"):
         self.biome_list = []
 
         # Generate clusters of planets
@@ -123,7 +123,8 @@ class Biome:
         self.planets = []
 
     def new_planet(self, x, y, r):
-        planet = Planet(x, y, r, f"testing123", self.biome)
+        # planet = Planet(x, y, r, f"testing123", self.biome)
+        planet = Planet(x, y, r, 0, self.biome)
 
         self.planets.append(planet)
         planet_group.add(planet)
@@ -144,7 +145,7 @@ class Planet(pygame.sprite.Sprite):
         self.biome = biome
 
         self.image = pygame.transform.scale(
-            pygame.image.load(f"assets/planets/planet_{biome}_{id}.png").convert_alpha(),
+            pygame.image.load(f"assets/planets/{biome}_{id}.png").convert_alpha(),
             (radius*2, radius*2),
         )
         
