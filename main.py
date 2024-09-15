@@ -15,28 +15,69 @@ from classes.items import Shard
 from classes.crafter import Crafter
 from classes.planet import * 
 
+
+def draw_stars(screen, num_stars=100):
+    """Draw randomly placed stars for the background."""
+    for _ in range(num_stars):
+        star_color = (255, 255, 255)  # White stars
+        star_pos = (random.randint(0, WIDTH), random.randint(0, HEIGHT))
+        pygame.draw.circle(screen, star_color, star_pos, 2)  # Small star size
+
 def home_screen():
-    # Load title font and button font
-    title_font = pygame.font.Font(None, 100)
+    # Load title font, button font, and input font
+    title_font = pygame.font.Font(None, 120)  # Sci-fi themed font or default pygame font
     button_font = pygame.font.Font(None, 50)
-    
+    input_font = pygame.font.Font(None, 40)  # Font for text input
+    label_font = pygame.font.Font(None, 40)  # Font for the label
+
     # Create text surfaces
-    title_text = title_font.render("Wizard Game", True, (255, 255, 255))
+    title_text = title_font.render("Wizard Game", True, (255, 255, 255))  # White text for space theme
     start_text = button_font.render("Start Game", True, (255, 255, 255))
     exit_text = button_font.render("Exit", True, (255, 255, 255))
     
     # Define button rectangles
     start_button = start_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
     exit_button = exit_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
+
+    # Text input box setup
+    input_box_rect = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 + 150, 300, 50)  # Input box rectangle
+    input_text = ''  # Text the player types
+    input_active = False  # Whether the input box is active (clicked)
+    
+    # Label for the text box
+    label_text = label_font.render("Enter Biome Type:", True, (255, 255, 255))
+
+    # Colors
+    box_color_inactive = pygame.Color('lightskyblue3')
+    box_color_active = pygame.Color('dodgerblue2')
+    box_color = box_color_inactive
+
+    # Load or generate a space background
+    background_image = pygame.image.load("background_0.png").convert()  # Replace with your space image
     
     # Home screen loop
+    biome_type = None  # Variable to store the biome type
     while True:
-        screen.fill((0, 0, 0))  # Clear the screen with black
+        # Draw the space background
+        screen.blit(background_image, (0, 0))
+        
+        # Optionally, draw stars dynamically
+        draw_stars(screen, num_stars=150)
         
         # Draw title and buttons
         screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 100))
-        screen.blit(start_text, start_button.topleft)  # Correctly position the button
-        screen.blit(exit_text, exit_button.topleft)  # Correctly position the button
+        screen.blit(start_text, start_button)
+        screen.blit(exit_text, exit_button)
+        
+        # Draw the label for the text box
+        screen.blit(label_text, (input_box_rect.x, input_box_rect.y - 40))
+        
+        # Draw the text input box
+        pygame.draw.rect(screen, box_color, input_box_rect, 2)
+        
+        # Render the current input text
+        input_surface = input_font.render(input_text, True, (255, 255, 255))
+        screen.blit(input_surface, (input_box_rect.x + 10, input_box_rect.y + 10))
         
         pygame.display.flip()  # Update the display
         
@@ -46,12 +87,36 @@ def home_screen():
                 sys.exit()
                 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = event.pos
-                if start_button.collidepoint(mouse_pos):
-                    return  # Start the game
-                elif exit_button.collidepoint(mouse_pos):
+                # If the user clicks inside the input box, activate it
+                if input_box_rect.collidepoint(event.pos):
+                    input_active = not input_active
+                else:
+                    input_active = False
+                # Change the color of the input box based on whether it's active
+                box_color = box_color_active if input_active else box_color_inactive
+                
+                # Check for button clicks
+                if start_button.collidepoint(event.pos):
+                    biome_type = input_text  # Save the typed biome type
+                    print(f"Starting game with biome type: {biome_type}")  # Print the biome type
+                    return biome_type  # Return the biome type for use in the game
+                elif exit_button.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()  # Exit the game
+
+            elif event.type == pygame.KEYDOWN:
+                if input_active:
+                    if event.key == pygame.K_RETURN:
+                        biome_type = input_text  # Save the typed biome type when pressing Enter
+                        print(f"Entered biome type: {biome_type}")
+                        input_text = ''  # Clear the input after pressing enter (optional)
+                    elif event.key == pygame.K_BACKSPACE:
+                        input_text = input_text[:-1]  # Remove the last character
+                    else:
+                        input_text += event.unicode  # Add the typed character to 
+
+        
+
 # Initialize Pygame
 pygame.init()
 
