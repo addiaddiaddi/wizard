@@ -13,7 +13,7 @@ from classes.constants import *
 from classes.inventory import Inventory
 from classes.items import Shard
 from classes.crafter import Crafter
-
+from classes.planet import * 
 # Initialize Pygame
 pygame.init()
 
@@ -33,7 +33,6 @@ all_sprites.add(crafter)
 
 inventory = Inventory()
 wizard_group.add(wizard)
-all_sprites.add(wizard)
 
 # Instantiate tiles
 tiles = Tiles(3*WIDTH, 3*HEIGHT)
@@ -48,7 +47,7 @@ last_spell_time = pygame.time.get_ticks()  # Initialize with the current time
 running = True
 inventory_showing = False
 
-
+planet_manager = PlanetManager(wizard.rect.x, wizard.rect.y)
 while running:
     clock.tick(60)
     offset_x, offset_y = get_camera_offset(screen, wizard)
@@ -108,7 +107,9 @@ while running:
 
     # Update game objects
     keys = pygame.key.get_pressed()
-    wizard.update(keys)
+    
+    mouse_pos = pygame.mouse.get_pos()
+    wizard.update(keys, mouse_pos)
 
     spells.update()
     mobs.update(wizard.rect.center)
@@ -150,11 +151,12 @@ while running:
     # Draw everything
     screen.fill(BLACK)
     tiles.draw_tiles(screen, offset_x, offset_y)
+    wizard.draw(screen, offset_x, offset_y)
     draw_sprites(all_sprites, screen, offset_x, offset_y)
     draw_healthbars(wizard, mobs, screen, offset_x, offset_y)
-
+    planet_manager.draw_planets(wizard.rect.x, wizard.rect.y, screen, offset_x, offset_y)
     # Draw hotbar
-    hotbar.draw(screen)
+    hotbar.draw(screen,)
 
     if inventory_showing:
         inventory.draw(screen)

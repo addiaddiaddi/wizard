@@ -10,8 +10,10 @@ class Shard(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface((32, 32))
         self.image.fill((random.randint(0,255),random.randint(0,255), random.randint(0,255)))
+        
         self.type = 'forest'
         self.tile_width = 32
+        
         self.name = "Retard Shard"
         self.image.blit(tileset, (0, 0), (random.randint(0,15) * 32, 42 * 32, 32, 32))
         self.rect = self.image.get_rect()

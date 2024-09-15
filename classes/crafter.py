@@ -5,7 +5,7 @@ class Crafter(pygame.sprite.Sprite):
     
     def __init__(self):
         super().__init__()
-        
+
         self.CRAFTING_WIDTH, self.CRAFTING_HEIGHT = 5*32, 5*32
         self.crafting_surface = pygame.Surface((self.CRAFTING_WIDTH, self.CRAFTING_HEIGHT))
         self.crafting_surface.fill(GRAY)
