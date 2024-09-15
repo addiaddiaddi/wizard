@@ -1,16 +1,20 @@
 import pygame
 import random
+
 from classes.constants import *
+
 class Shard(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, biome, x, y):
         super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill((random.randint(0,255),random.randint(0,255), random.randint(0,255)))
-        self.type = 'forest'
         
-        self.file = 'assets/gfx/wizard_full.png'
-        self.tile_width = 32
-        self.tileset = pygame.image.load(self.file)
+        self.biome = biome
+        self.image = pygame.transform.scale(pygame.image.load(f'assets/shards/{self.biome}.png').convert_alpha(), (80, 80))
+        
+        self.rect = self.image.get_rect(center=(x, y))
+        
+        
+    def draw(self, screen, coord_x, coord_y):
+        screen.blit(self.image, (coord_x, coord_y))
         
         
         

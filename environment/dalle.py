@@ -1,12 +1,17 @@
 from openai import OpenAI
 
-client = OpenAI()
+from dotenv import load_dotenv
+load_dotenv()
 import requests
 import os
 
 # Initialize API Key
 
 # Function to query DALL·E
+
+print(os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 def query_dalle(prompt, image_size="1024x1024", n=1):
     try:
         # Generate image
@@ -17,7 +22,7 @@ def query_dalle(prompt, image_size="1024x1024", n=1):
             size=image_size  # Image size, e.g., "1024x1024")
         )
 
-        print(response)
+        # print(response)
         # Extract the image URL(s)
         image_urls = [img.url for img in response.data]
         return image_urls
