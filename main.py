@@ -155,6 +155,7 @@ while running:
     draw_sprites(all_sprites, screen, offset_x, offset_y)
     draw_healthbars(wizard, mobs, screen, offset_x, offset_y)
     planet_manager.draw_planets(wizard.rect.x, wizard.rect.y, screen, offset_x, offset_y)
+    planet_manager.mob_gen(wizard.rect.x, wizard.rect.y)
     # Draw hotbar
     hotbar.draw(screen,)
 

@@ -1,14 +1,15 @@
 import pygame
 from classes.constants import *
 import random
-
+from classes.mob import *
+import math
 class PlanetManager:
     
     def __init__(self, player_x, player_y, initial_biome='forest'):
         
         biome_names = ['lava', 'ice', 'desert', 'fairy', 'mountain', 'mushroom', 'gemstones', 'river', 'flowerland']
         
-        biome_list = []
+        self.biome_list = []
 
 
         # Generate clusters of planets
@@ -29,7 +30,7 @@ class PlanetManager:
                 y = chunk_width * j - width // 2 + player_y
                 
                 new_biome = Biome(name)
-                
+                self.biome_list.append(new_biome)
                 N = random.randint(2,4)
                 planets = []
                 attempts = 0
@@ -46,6 +47,14 @@ class PlanetManager:
                         if distance < (planet.radius + radius):
                             collision = True
                             break
+                            
+                        dist_x = planet.x - player_x
+                        dist_y = planet.y - player_y
+                        distance = (dist_x**2 + dist_y**2)**0.5
+                        if distance < (planet.radius + radius + 25):
+                            collision = True
+                            break                    
+                        
                     if not collision:
                         new_planet = new_biome.new_planet(new_x, new_y, radius)
                         planets.append(new_planet)
@@ -53,7 +62,6 @@ class PlanetManager:
                         
                         print(x,y, radius)
                     attempts += 1
-                biome_list.append((name, planets))
                 
     def draw_planets(self, player_x, player_y, screen,  offset_x, offset_y):
         
@@ -64,6 +72,30 @@ class PlanetManager:
             if distance < 2000:
                 planet.draw(screen, offset_x, offset_y)
 
+    
+    def mob_gen(self, player_x, player_y):
+        
+        for planet in planet_group:
+            dist_x = planet.x - player_x
+            dist_y = planet.y - player_y
+            distance = (dist_x**2 + dist_y**2)**0.5
+            if distance < 100 or distance > 800:
+                continue
+            # Probability of mob spawning inversely proportional to the planet's radius
+            spawn_probability = planet.radius / 5000  # Adjust the divisor to scale difficulty
+            if random.random() < spawn_probability:
+                # Assuming a function create_mob() exists that creates and returns a mob object
+                
+                angle = random.uniform(0, 2 * math.pi)
+                spawn_x = int(planet.x + planet.radius * math.cos(angle))
+                spawn_y = int(planet.y + planet.radius * math.sin(angle))
+                mob = MobFactory.create_mob(random.choice(["fast", "strong", "normal"]), spawn_x, spawn_y)
+                all_sprites.add(mob)
+                mobs.add(mob)
+
+                print(f"Mob spawned at ({planet.x}, {planet.y}) on planet with radius {planet.radius}")
+        
+        
 class Biome:
     
     def __init__(self, name):

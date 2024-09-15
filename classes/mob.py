@@ -4,7 +4,7 @@ import random
 from classes.constants import *
 
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, health, speed, type, width, height):
+    def __init__(self, health, speed, type, width, height, x=0, y=0):
         super().__init__()
         self.sprites = [
             pygame.transform.scale(pygame.image.load('assets/monsters/monster_0.png').convert_alpha(), (80, 80)),
@@ -16,8 +16,8 @@ class Mob(pygame.sprite.Sprite):
         self.image = self.sprites[self.type]
         self.rect = self.image.get_rect()
         
-        self.rect.x = random.randint(width + 20, width + 100)
-        self.rect.y = random.randint(0, height)
+        self.rect.x = x
+        self.rect.y = y
         self.speed = speed
         self.max_health = health
         self.health = self.max_health
@@ -33,10 +33,10 @@ class Mob(pygame.sprite.Sprite):
 
 class MobFactory:
     @staticmethod
-    def create_mob(mob_type):
+    def create_mob(mob_type,x=0,y=0):
         if mob_type == "fast":
-            return Mob(health=10, speed=5, type=1, width=20, height=10)
+            return Mob(health=10, speed=5, type=1, width=20, height=10,x=x, y=y)
         elif mob_type == "strong":
-            return Mob(health=40, speed=2, type=1, width=20, height=10)
+            return Mob(health=40, speed=2, type=1, width=20, height=10,x=x,y=y)
         else:
-            return Mob(health=20, speed=3, type=0, width=20, height=10)
+            return Mob(health=20, speed=3, type=0, width=20, height=10,x=x,y=y)
