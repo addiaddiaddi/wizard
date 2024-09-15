@@ -6,14 +6,14 @@ import asyncio
 from dotenv import load_dotenv
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key="")
 
 def remove_bg(img):
     r = requests.post(
         'https://api.remove.bg/v1.0/removebg',
         files={'image_file': img},
         data={'size': 'auto'},
-        headers={'X-Api-Key': os.getenv("REMOVE_BG_API_KEY")}
+        headers={'X-Api-Key': ''}
         )
     return BytesIO(r.content)
 
@@ -76,14 +76,17 @@ def generate_monster(element):
     return res
 
 if __name__ == "__main__":
-    element = "fairy"
+    element = "forest"
     frames, explosion = generate_spell(element)
+    
     for i, image_bytes in enumerate(frames):
-        with open(f"spell_{i}.png", "wb") as f:
+        with open(f"assets/spells/spell_{i}.png", "wb") as f:
             f.write(image_bytes.getbuffer())
-    with open(f"spell_explosion.png", "wb") as f:
+            
+    with open(f"assets/spells/spell_explosion.png", "wb") as f:
         f.write(explosion.getbuffer())
+        
     monster_frames = generate_monster(element)
     for i, image_bytes in enumerate(monster_frames):
-        with open(f"monster_{i}.png", "wb") as f:
+        with open(f"assets/monsters/monster_{i}.png", "wb") as f:
             f.write(image_bytes.getbuffer())

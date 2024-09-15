@@ -1,5 +1,7 @@
 import pygame
 import random
+import subprocess
+import sys
 
 from classes.wizard import Wizard
 from classes.mob import MobFactory
@@ -39,6 +41,9 @@ tiles = Tiles(WIDTH, HEIGHT)
 # Instantiate hotbar
 hotbar = Hotbar()
 
+spell_cooldown = 500  # Cooldown time in milliseconds (0.5 seconds)
+last_spell_time = pygame.time.get_ticks()  # Initialize with the current time
+
 # Game loop
 running = True
 inventory_showing = False
@@ -49,6 +54,7 @@ while running:
     offset_x, offset_y = get_camera_offset(screen, wizard)
         
     keydown = False
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -60,20 +66,36 @@ while running:
 
             # Fire a spell on spacebar press
             if event.key == pygame.K_SPACE:
-                mouse_pos = pygame.mouse.get_pos()
-                selected_spell = hotbar.get_selected_spell()
-                SpellFactory.create_spell(selected_spell, wizard.rect.centerx, wizard.rect.centery, mouse_pos)
+                current_time = pygame.time.get_ticks()  # Get the current time
+                if current_time - last_spell_time >= spell_cooldown:
+                    mouse_pos = pygame.mouse.get_pos()
+                    selected_spell = hotbar.get_selected_spell()
+                    SpellFactory.create_spell(selected_spell, wizard.rect.centerx, wizard.rect.centery, 
+                        (mouse_pos[0] + offset_x, mouse_pos[1] + offset_y)
+                    )
+                    last_spell_time = current_time  # Update the last spell fire time
+            
+            if pygame.key.get_pressed()[pygame.K_e]:
+                inventory_showing = not inventory_showing
+            
+            if pygame.key.get_pressed()[pygame.K_r]:
+                process = subprocess.Popen(
+                    ['python', 'image_generation/image_generation.py'],  # Replace with your command
+                    stdout=sys.stdout,
+                    stderr=sys.stdout
+                )
+                
         elif event.type == pygame.MOUSEBUTTONDOWN:
             crafter.select(inventory)
     
-    crafting_collission = pygame.sprite.groupcollide(wizard_group, crafter_group, False, False)
+    crafting_collision = pygame.sprite.groupcollide(wizard_group, crafter_group, False, False)
     
-    if crafting_collission != {}:
-        active_crafter = crafting_collission[wizard][0]
+    if crafting_collision != {}:
+        active_crafter = crafting_collision[wizard][0]
         inventory_showing = True
     elif pygame.key.get_pressed()[pygame.K_e] and keydown:
         inventory_showing = not inventory_showing
-    elif crafting_collission == {}:
+    elif crafting_collision == {}:
         if active_crafter is not None:
             active_crafter = None
             inventory_showing = False
@@ -90,13 +112,17 @@ while running:
 
     spells.update()
     mobs.update(wizard.rect.center)
+    particles.update()
 
     # Check for collisions between spells and mobs
-    hits = pygame.sprite.groupcollide(mobs, spells, False, True)
+    hits = pygame.sprite.groupcollide(mobs, spells, False, False)
     for mob in hits:
         mob.health -= 10
+        
+        for hit_spell in hits[mob]:
+            hit_spell.update(hit=True)
+        
         if mob.health <= 0:
-            
             shard = Shard()
             shard.rect = mob.rect
             
