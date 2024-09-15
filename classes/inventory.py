@@ -20,7 +20,6 @@ class Inventory():
         
         self.inventory_surface.set_alpha(110)  # Set transparency level (0-255)
         
-        
         self.selected_item = None  # Track the selected item
         
         self.inventory_array = []
@@ -34,7 +33,7 @@ class Inventory():
             for j in range(self.slots[1]):
                 slot_x = inventory_x + i * (self.slot_size[0] + self.slot_margin)
                 slot_y = inventory_y + j * (self.slot_size[1] + self.slot_margin)
-                slot_rect = pygame.Rect(slot_x, slot_y, self.slot_size[0], self.slot_size[1])
+                slot_rect = pygame.Rect(slot_x + 4, slot_y + 4, self.slot_size[0] - 8, self.slot_size[1] - 8)
                 
                 if slot_rect.collidepoint(pos):
                     item_idx = j * self.slots[0] + i
@@ -54,7 +53,7 @@ class Inventory():
                 
                 slot_x = inventory_x + i * (self.slot_size[0] + self.slot_margin)
                 slot_y = inventory_y + j * (self.slot_size[1] + self.slot_margin)
-                pygame.draw.rect(surface, BLACK, (slot_x, slot_y, self.slot_size[0], self.slot_size[1]), 2)  # Draw slot border
+                pygame.draw.rect(surface, BLACK, (slot_x + 4, slot_y + 4, self.slot_size[0] - 8, self.slot_size[1] - 8), 2, 8)  # Draw slot border
 
                 # Check if there is an item in the slot and draw it
                 item_idx = j*self.slots[0] + i
@@ -70,13 +69,13 @@ class Inventory():
                 surface.blit(item_image, (slot_x, slot_y))
                 
                 font = pygame.font.Font(None, 36)  # Load a font object
-                count_text = font.render(str(self.counts[item_biome]), True, WHITE)  # Render the count text
-                text_x = slot_x + self.slot_size[0] / 10  # Center text horizontally in the slot
-                text_y = slot_y + self.slot_size[1] - count_text.get_height()  # Position text at the bottom of the slot
+                count_text = font.render(str(self.counts[item_biome]), True, BLACK)  # Render the count text
+                text_x = slot_x + self.slot_size[0] / 10 + 4  # Center text horizontally in the slot
+                text_y = slot_y + self.slot_size[1] - count_text.get_height() - 4  # Position text at the bottom of the slot
                 surface.blit(count_text, (text_x, text_y))  # Draw the text on the surface
                 
                 if item_biome == self.selected_item:
-                    pygame.draw.rect(surface, RED, (slot_x, slot_y, self.slot_size[0], self.slot_size[1]), 4)
+                    pygame.draw.rect(surface, RED, (slot_x + 4, slot_y + 4, self.slot_size[0] - 8, self.slot_size[1] - 8), 4, 8)
     
     def add_shard(self, shard):
         if len(self.inventory_array) >= 30:

@@ -136,19 +136,19 @@ if __name__ == "__main__":
     # with open(f"assets/spells/spell_explosion_{element}.png", "wb") as f:
     #     f.write(explosion.getbuffer())
     
-    for element in [
-        "temporal-rift",
-        "techno-organic",
-        "apocalypse",
-        "magical"
-    ]:
-        for i in range(3):
-            generate_planet_monster(i, element)
+    # for element in [
+    #     "marijuana"
+    # ]:
+    #     for i in range(3):
+    #         generate_planet_monster(i, element)
         
-        generate_shard_spell(element)
+    #     generate_shard_spell(element)
         
     # generate_planet_monster(2, "ice")
     # generate_shard_spell("ice")
+    
+    with open(f"assets/shards/shard_{"electricity"}.png", "wb") as f:
+        f.write(generate_shard("electricity").getbuffer())
 
     # monster_frames = generate_monster(element)
     # for i, image_bytes in enumerate(monster_frames):
