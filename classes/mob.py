@@ -13,11 +13,11 @@ class Mob(pygame.sprite.Sprite):
         
         self.sprites = [
             pygame.transform.scale(
-                pygame.image.load(f"assets/monsters/monster_{0}_{self.biome}_{self.planet_id}.png").convert_alpha(),
+                pygame.image.load(f"assets/monsters/{self.biome}_{self.planet_id}_0.png").convert_alpha(),
                 (80, 80),
             ),
             pygame.transform.scale(
-                pygame.image.load(f"assets/monsters/monster_{1}_{self.biome}_{self.planet_id}.png").convert_alpha(),
+                pygame.image.load(f"assets/monsters/{self.biome}_{self.planet_id}_1.png").convert_alpha(),
                 (80, 80),
             ),
         ]

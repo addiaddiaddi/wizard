@@ -11,15 +11,15 @@ class Spell(pygame.sprite.Sprite):
         
         # Load spell images (assuming they are named sprite_1.png, sprite_2.png, sprite_3.png)
         self.sprites = [
-            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_{0}_{biome}.png').convert_alpha(), (100, 100)),
-            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_{1}_{biome}.png').convert_alpha(), (100, 100)),
-            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_{2}_{biome}.png').convert_alpha(), (100, 100)),
+            pygame.transform.scale(pygame.image.load(f'assets/spells/{biome}_0.png').convert_alpha(), (100, 100)),
+            pygame.transform.scale(pygame.image.load(f'assets/spells/{biome}_1.png').convert_alpha(), (100, 100)),
+            pygame.transform.scale(pygame.image.load(f'assets/spells/{biome}_2.png').convert_alpha(), (100, 100)),
         ]
         
         self.biome = biome
         
         self.explosion_sprite = pygame.transform.scale(
-            pygame.image.load(f'assets/spells/spell_explosion_{biome}.png'
+            pygame.image.load(f'assets/spells/{biome}_explosion.png'
         ).convert_alpha(), (120, 120))
         
         self.explosion_sprite = pygame.transform.rotate(
