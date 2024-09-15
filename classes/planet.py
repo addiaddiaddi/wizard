@@ -5,25 +5,24 @@ from classes.mob import *
 import math
 
 biome_names = [
+    "apocalypse",
+    "death",
+    "desert",
     "fire",
     "ice",
-    "desert",
-    "fairy",
-    "mountain",
-    "mushroom",
-    "gemstones",
-    "river",
-    "flowerland",
+    "magical",
+    "techno-organic",
+    "temporal-rift",
 ]
 
 class PlanetManager:
 
-    def __init__(self, player_x, player_y, initial_biome="nature"):
+    def __init__(self, player_x, player_y, initial_biome="cyberpunk"):
         self.biome_list = []
 
         # Generate clusters of planets
-        num = 1
-        width = 1000
+        num = 3
+        width = 3000
 
         chunk_width = width // num
 
@@ -41,8 +40,8 @@ class PlanetManager:
                 new_biome = Biome(biome)
                 self.biome_list.append(new_biome)
                 
-                # N = random.randint(2, 4)
-                N = 1
+                N = random.randint(2, 3)
+                # N = 1
                 
                 planets = []
                 attempts = 0
@@ -124,7 +123,7 @@ class Biome:
 
     def new_planet(self, x, y, r):
         # planet = Planet(x, y, r, f"testing123", self.biome)
-        planet = Planet(x, y, r, 0, self.biome)
+        planet = Planet(x, y, r, len(self.planets), self.biome)
 
         self.planets.append(planet)
         planet_group.add(planet)
@@ -145,7 +144,7 @@ class Planet(pygame.sprite.Sprite):
         self.biome = biome
 
         self.image = pygame.transform.scale(
-            pygame.image.load(f"assets/planets/{biome}_{id}.png").convert_alpha(),
+            pygame.image.load(f"assets/planets/planet_{biome}_{id}.png").convert_alpha(),
             (radius*2, radius*2),
         )
         

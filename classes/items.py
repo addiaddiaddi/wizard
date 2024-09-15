@@ -8,7 +8,7 @@ class Shard(pygame.sprite.Sprite):
         super().__init__()
         
         self.biome = biome
-        self.image = pygame.transform.scale(pygame.image.load(f'assets/shards/{self.biome}.png').convert_alpha(), (80, 80))
+        self.image = pygame.transform.scale(pygame.image.load(f'assets/shards/shard_{self.biome}.png').convert_alpha(), (80, 80))
         
         self.rect = self.image.get_rect(center=(x, y))
         

@@ -5,7 +5,7 @@ from classes.constants import *
 class Hotbar:
     def __init__(self):
         self.selected_slot = 0
-        self.spell_types = [("nature", 1)]
+        self.spell_types = [("electricity", 1)]
     
     def add_spell(self, biome, level):
         self.spell_types.append((biome, level))
