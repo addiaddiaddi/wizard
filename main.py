@@ -76,11 +76,7 @@ def home_screen():
         screen.blit(background_image, (0, 1024))
         screen.blit(background_image, (1024, 1024))
         screen.blit(background_image, (2048, 0))
-        screen.blit(background_image, (2048, 1024))
-        
-        
-        
-        
+        screen.blit(background_image, (2048, 1024)) 
         
         # Optionally, draw stars dynamically
         draw_stars(screen, num_stars=150)
@@ -146,8 +142,9 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Wizard")
 
 user_biome = home_screen()
-
 lore = generate_lore(user_biome)
+process = subprocess.Popen(['python', 'image_generation/image_generation.py', user_biome], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
 # Load the Star Wars font
 font_path = "assets/misc/pixelfont.otf"  # Path to the Star Wars font file
 font_size = 60  # Set the font size
@@ -155,9 +152,8 @@ font = pygame.font.Font(font_path, font_size)
 
 score_font = pygame.font.Font(font_path, font_size)
 
-def draw_star_wars_text(screen, text, font, color, speed=2):
+def draw_star_wars_text(screen, text, font, color, speed=0.8):
     lines = text.split('\n')
-
 
     # Further split lines to limit each line to a certain number of characters without cutting words in half
     max_chars_per_line = 40  # Set the maximum number of characters per line
@@ -195,6 +191,10 @@ def draw_star_wars_text(screen, text, font, color, speed=2):
 instructions = f"\n--------------\n Directive:\nYour mission is to explore the generated universe, kill many monsters, and discover spells. \nYou will spawn into the {user_biome} region of the galaxy where you will be greeted by {user_biome}-ish mobs. \nRegion-specific mobs will drop shards for that region, which can be crafted into unique spells at crafting planets. \nKilling mobs will increase your score. Don't die and have fun."
 lore += instructions
 draw_star_wars_text(screen, lore, font, WHITE)
+
+while process.poll() is None:
+    screen.fill((0, 0, 0))
+
 wizard = Wizard(WIDTH + 32 * 32, HEIGHT + 32 * 32)
 
 crafter = Crafter()
@@ -220,7 +220,7 @@ last_spell_time = pygame.time.get_ticks()  # Initialize with the current time
 running = True
 inventory_showing = False
 
-planet_manager = PlanetManager(wizard.rect.x, wizard.rect.y, crafter.rect.x, crafter.rect.y)
+planet_manager = PlanetManager(wizard.rect.x, wizard.rect.y, crafter.rect.x, crafter.rect.y, user_biome)
 
 score = 0
 

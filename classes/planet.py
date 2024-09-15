@@ -13,11 +13,12 @@ biome_names = [
     "magical",
     "techno-organic",
     "temporal-rift",
+    "cyberpunk"
 ]
 
 class PlanetManager:
 
-    def __init__(self, player_x, player_y, crafter_x, crafter_y, initial_biome="cyberpunk"):
+    def __init__(self, player_x, player_y, crafter_x, crafter_y, initial_biome):
         self.biome_list = []
 
         # Generate clusters of planets

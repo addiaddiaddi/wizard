@@ -10,9 +10,10 @@ class Crafter(pygame.sprite.Sprite):
         self.crafting_surface = pygame.Surface((self.CRAFTING_WIDTH, self.CRAFTING_HEIGHT))
         self.crafting_surface.fill(WHITE)
         self.crafting_surface.set_alpha(110)  # Set transparency level (0-255)
+        self.crafting_rect = pygame.Rect(0, 0, self.CRAFTING_WIDTH, self.CRAFTING_HEIGHT)
         
         self.crafting_rect.x = (2400 - self.crafting_rect.width) // 2
-        self.crafting_rect.y = (1400 - self.crafting_rect.height) // 3
+        self.crafting_rect.y = (1200 - self.crafting_rect.height) // 3
         self.crafting_surface.fill(WHITE)
         self.crafting_surface.set_alpha(110)  # Set transparency level (0-255)
         
