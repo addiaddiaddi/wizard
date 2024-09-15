@@ -72,6 +72,15 @@ def home_screen():
     while True:
         # Draw the space background
         screen.blit(background_image, (0, 0))
+        screen.blit(background_image, (1024, 0))
+        screen.blit(background_image, (0, 1024))
+        screen.blit(background_image, (1024, 1024))
+        screen.blit(background_image, (2048, 0))
+        screen.blit(background_image, (2048, 1024))
+        
+        
+        
+        
         
         # Optionally, draw stars dynamically
         draw_stars(screen, num_stars=150)
@@ -132,7 +141,7 @@ def home_screen():
 pygame.init()
 
 # Screen dimensions
-WIDTH, HEIGHT = 32*32, 32*32
+WIDTH, HEIGHT = 2400, 1400
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Wizard")
 
@@ -183,7 +192,7 @@ def draw_star_wars_text(screen, text, font, color, speed=2):
         pygame.time.wait(1)
 
 # Define the Star Wars text
-instructions = f"\n--------------\n Directive:\nYour mission is to explore the generated universe, kill many monsters, and discover spells. \nYou will spawn into the {user_biome} region of the galaxy where you will be greeted by {user_biome}-ish mobs. \nRegion-specific mobs will drop shards for that region, which can be crafted into unique spells at crafting planets."
+instructions = f"\n--------------\n Directive:\nYour mission is to explore the generated universe, kill many monsters, and discover spells. \nYou will spawn into the {user_biome} region of the galaxy where you will be greeted by {user_biome}-ish mobs. \nRegion-specific mobs will drop shards for that region, which can be crafted into unique spells at crafting planets. \nKilling mobs will increase your score. Don't die and have fun."
 lore += instructions
 draw_star_wars_text(screen, lore, font, WHITE)
 wizard = Wizard(WIDTH + 32 * 32, HEIGHT + 32 * 32)
@@ -211,7 +220,7 @@ last_spell_time = pygame.time.get_ticks()  # Initialize with the current time
 running = True
 inventory_showing = False
 
-planet_manager = PlanetManager(wizard.rect.x, wizard.rect.y)
+planet_manager = PlanetManager(wizard.rect.x, wizard.rect.y, crafter.rect.x, crafter.rect.y)
 
 score = 0
 

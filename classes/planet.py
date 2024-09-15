@@ -17,7 +17,7 @@ biome_names = [
 
 class PlanetManager:
 
-    def __init__(self, player_x, player_y, initial_biome="cyberpunk"):
+    def __init__(self, player_x, player_y, crafter_x, crafter_y, initial_biome="cyberpunk"):
         self.biome_list = []
 
         # Generate clusters of planets
@@ -66,6 +66,13 @@ class PlanetManager:
                         dist_y = planet.y - player_y
                         distance = (dist_x**2 + dist_y**2) ** 0.5
                         if distance < (planet.radius + radius + 25):
+                            collision = True
+                            break
+                        
+                        dist_x = planet.x - crafter_x
+                        dist_y = planet.y - crafter_y
+                        distance = (dist_x**2 + dist_y**2) ** 0.5
+                        if distance < (planet.radius + 128):
                             collision = True
                             break
 
