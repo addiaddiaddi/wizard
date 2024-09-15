@@ -8,7 +8,7 @@ from classes.mob import MobFactory
 from classes.spell import SpellFactory
 from classes.hotbar import Hotbar
 from classes.tiles import Tiles
-from classes.utilities import get_camera_offset, draw_sprites, draw_healthbars
+from classes.utilities import *
 from classes.constants import *
 from classes.inventory import Inventory
 from classes.items import Shard
@@ -134,8 +134,58 @@ WIDTH, HEIGHT = 32*32, 32*32
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Wizard")
 
-home_screen()
+user_biome = home_screen()
 
+lore = generate_lore(user_biome)
+# Load the Star Wars font
+font_path = "assets/misc/pixelfont.otf"  # Path to the Star Wars font file
+font_size = 60  # Set the font size
+font = pygame.font.Font(font_path, font_size)
+
+
+font_path = "assets/misc/otherfont.ttf"  # Path to the Star Wars font file
+score_font = pygame.font.Font(font_path, font_size)
+
+def draw_star_wars_text(screen, text, font, color, speed=2):
+    lines = text.split('\n')
+
+
+    # Further split lines to limit each line to a certain number of characters without cutting words in half
+    max_chars_per_line = 40  # Set the maximum number of characters per line
+    split_lines = []
+    for line in lines:
+        while len(line) > max_chars_per_line:
+            split_point = line.rfind(' ', 0, max_chars_per_line)
+            if split_point == -1:
+                split_point = max_chars_per_line
+            split_lines.append(line[:split_point])
+            line = line[split_point:].lstrip()
+        split_lines.append(line)
+    lines = split_lines
+
+
+    max_width, max_height = screen.get_size()
+    text_height = len(lines) * font.get_height()
+    y = max_height
+    while y + text_height > 0:
+        screen.fill((0, 0, 0))  # Clear the screen with black
+
+        padding = 20  # Define the padding value
+        for i, line in enumerate(lines):
+            text_surface = font.render(line, True, color)
+            text_rect = text_surface.get_rect(center=(max_width // 2, y + i * font.get_height()))
+            text_rect.x += padding  # Add padding to the left side
+            text_rect.width -= 2 * padding  # Adjust the width to account for padding on both sides
+            screen.blit(text_surface, text_rect)
+
+        pygame.display.flip()
+        y -= speed
+        pygame.time.wait(1)
+
+# Define the Star Wars text
+instructions = f"\n--------------\n Directive:\nYour mission is to explore the generated universe, kill many monsters, and discover spells. \nYou will spawn into the {user_biome} region of the galaxy where you will be greeted by {user_biome}-ish mobs. \nRegion-specific mobs will drop shards for that region, which can be crafted into unique spells at crafting planets."
+lore += instructions
+draw_star_wars_text(screen, lore, font, WHITE)
 wizard = Wizard(WIDTH + 32 * 32, HEIGHT + 32 * 32)
 
 crafter = Crafter()
@@ -162,6 +212,10 @@ running = True
 inventory_showing = False
 
 planet_manager = PlanetManager(wizard.rect.x, wizard.rect.y)
+
+score = 0
+
+
 while running:
     clock.tick(60)
     offset_x, offset_y = get_camera_offset(screen, wizard)
@@ -231,6 +285,7 @@ while running:
                 all_sprites.add(shard)
                 dropped_shards.add(shard)
             
+            score += 1
             mob.kill()
 
     # Check for collisions between the wizard and mobs  
@@ -246,15 +301,30 @@ while running:
     for shard in pickups.get(wizard,[]):
         inventory.add_shard(shard)
         
+    # planet_collisions = pygame.sprite.groupcollide(wizard_group, planet_group, False, False)
+    
+    for planet in planet_group:
+        
+        dist_x = planet.x - wizard.rect.centerx
+        dist_y = planet.y - wizard.rect.centery
+        distance = (dist_x**2 + dist_y**2) ** 0.5
+        if distance < planet.radius *.8:
+            angle = math.atan2(dist_y, dist_x)
+            wizard.rect.x += math.cos(angle) * (distance - planet.radius*.8)
+            wizard.rect.y += math.sin(angle) * (distance - planet.radius*.8)
     # Draw everything
     screen.fill(BLACK)
     tiles.draw_tiles(screen, offset_x, offset_y)
-    wizard.draw(screen, offset_x, offset_y)
-    draw_sprites(all_sprites, screen, offset_x, offset_y)
-    draw_healthbars(wizard, mobs, screen, offset_x, offset_y)
-    
     planet_manager.draw_planets(wizard.rect.x, wizard.rect.y, screen, offset_x, offset_y)
     planet_manager.mob_gen(wizard.rect.x, wizard.rect.y)
+    draw_sprites(all_sprites, screen, offset_x, offset_y)
+
+    draw_healthbars(wizard, mobs, screen, offset_x, offset_y)
+    
+    score_text = score_font.render(f"Score: {score}", True, WHITE)
+    screen.blit(score_text, (10, 10))
+
+    wizard.draw(screen, offset_x, offset_y)
     
     # Draw hotbar
     hotbar.draw(screen,)

@@ -93,7 +93,7 @@ class PlanetManager:
                 continue
             # Probability of mob spawning inversely proportional to the planet's radius
             spawn_probability = (
-                planet.radius / 5000
+                planet.radius / 50000
             )  # Adjust the divisor to scale difficulty
             if random.random() < spawn_probability:
                 # Assuming a function create_mob() exists that creates and returns a mob object
