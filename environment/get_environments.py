@@ -23,7 +23,7 @@ def darken_image(image_path):
 
 
 def get_background(idx):
-    prompt = "Generate a pixel art image of a colorful galaxy in deep space. The image should feature glowing stars, some with bright flares, scattered across the dark night sky. Include hues of blue, purple, red, and pink for stars and cosmic clouds, with a focus on a central bright star radiating light. The stars and nebulae should be depicted using small square pixels to mimic the classic pixel art style, creating a vibrant, otherworldly, retro visual."
+    prompt = "Generate a pixel art image of deep space. The image should feature glowing stars, some with bright flares, scattered across the dark night sky. Include hues of blue, purple, red, and pink for stars and cosmic clouds. The stars and nebulae should be depicted using small square pixels to mimic the classic pixel art style, creating a vibrant, otherworldly, retro visual."
     images = environment.dalle.query_dalle(prompt, image_size="1024x1024", n=1) 
     print(images)
 
@@ -31,6 +31,7 @@ def get_background(idx):
     environment.dalle.download_image(images[0], f"background_{idx+1}.png")
 
     darken_image(f"background_0.png")
+    darken_image(f"background_{idx+1}.png")
     return 'background_0.png' 
 
 

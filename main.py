@@ -14,6 +14,44 @@ from classes.inventory import Inventory
 from classes.items import Shard
 from classes.crafter import Crafter
 from classes.planet import * 
+
+def home_screen():
+    # Load title font and button font
+    title_font = pygame.font.Font(None, 100)
+    button_font = pygame.font.Font(None, 50)
+    
+    # Create text surfaces
+    title_text = title_font.render("Wizard Game", True, (255, 255, 255))
+    start_text = button_font.render("Start Game", True, (255, 255, 255))
+    exit_text = button_font.render("Exit", True, (255, 255, 255))
+    
+    # Define button rectangles
+    start_button = start_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
+    exit_button = exit_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
+    
+    # Home screen loop
+    while True:
+        screen.fill((0, 0, 0))  # Clear the screen with black
+        
+        # Draw title and buttons
+        screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 100))
+        screen.blit(start_text, start_button.topleft)  # Correctly position the button
+        screen.blit(exit_text, exit_button.topleft)  # Correctly position the button
+        
+        pygame.display.flip()  # Update the display
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+                
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                if start_button.collidepoint(mouse_pos):
+                    return  # Start the game
+                elif exit_button.collidepoint(mouse_pos):
+                    pygame.quit()
+                    sys.exit()  # Exit the game
 # Initialize Pygame
 pygame.init()
 
@@ -22,7 +60,9 @@ WIDTH, HEIGHT = 32*32, 32*32
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Wizard")
 
-wizard = Wizard(WIDTH, HEIGHT)
+home_screen()
+
+wizard = Wizard(WIDTH + 32 * 32, HEIGHT + 32 * 32)
 
 crafter = Crafter()
 crafter_group.add(crafter)
@@ -167,3 +207,4 @@ while running:
     pygame.display.flip()
 
 pygame.quit()
+

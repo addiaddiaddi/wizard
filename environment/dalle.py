@@ -20,7 +20,7 @@ def query_dalle(prompt, image_size="1024x1024", n=1):
             size=image_size  # Image size, e.g., "1024x1024")
         )
 
-        print(response)
+        # print(response)
         # Extract the image URL(s)
         image_urls = [img.url for img in response.data]
         return image_urls
