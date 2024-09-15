@@ -99,12 +99,6 @@ while running:
             active_crafter = None
             inventory_showing = False
 
-    # Spawn mobs randomly
-    if random.randint(1, 100) < 3:
-        mob = MobFactory.create_mob(random.choice(["fast", "strong", "normal"]))
-        all_sprites.add(mob)
-        mobs.add(mob)
-
     # Update game objects
     keys = pygame.key.get_pressed()
     
@@ -124,11 +118,12 @@ while running:
             hit_spell.update(hit=True)
         
         if mob.health <= 0:
-            shard = Shard()
-            shard.rect = mob.rect
+            if random.randint(0, 10) < 11:
+                shard = Shard(mob.biome, mob.rect.centerx, mob.rect.centery)
             
-            all_sprites.add(shard)
-            dropped_shards.add(shard)
+                all_sprites.add(shard)
+                dropped_shards.add(shard)
+            
             mob.kill()
 
     # Check for collisions between the wizard and mobs  
@@ -140,9 +135,7 @@ while running:
         print("GAME OVER")
         running = False
 
-
     pickups = pygame.sprite.groupcollide(wizard_group, dropped_shards, False, True)
-
     for shard in pickups.get(wizard,[]):
         inventory.add_shard(shard)
         
@@ -154,6 +147,7 @@ while running:
     wizard.draw(screen, offset_x, offset_y)
     draw_sprites(all_sprites, screen, offset_x, offset_y)
     draw_healthbars(wizard, mobs, screen, offset_x, offset_y)
+    
     planet_manager.draw_planets(wizard.rect.x, wizard.rect.y, screen, offset_x, offset_y)
     planet_manager.mob_gen(wizard.rect.x, wizard.rect.y)
     # Draw hotbar

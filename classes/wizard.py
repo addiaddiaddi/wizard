@@ -119,6 +119,8 @@ class Wizard(pygame.sprite.Sprite):
                 else:
                     # Set the attack frame
                     self.image = self.animations[attack_animation_key][self.attack_frame_index]
+                    
+            return
 
 
         # Movement controls

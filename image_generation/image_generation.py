@@ -117,7 +117,8 @@ def generate_planet_monster(id, element):
 
 
 if __name__ == "__main__":
-    element = "water"
+    element = "electricity"
+    
     """ 
     with open(f"assets/planets/planet_{element}.png", "wb") as f:
         f.write(generate_planet(element).getbuffer())
@@ -125,11 +126,20 @@ if __name__ == "__main__":
     with open(f"assets/shards/shard_{element}.png", "wb") as f:
         f.write(generate_shard(element).getbuffer())
     """
+    
+    frames, explosion = generate_spell(element)
+    
+    for i, image_bytes in enumerate(frames):
+        with open(f"assets/spells/spell_{i}_{element}.png", "wb") as f:
+            f.write(image_bytes.getbuffer())
+    
+    with open(f"assets/spells/spell_explosion_{element}.png", "wb") as f:
+        f.write(explosion.getbuffer())
 
     # monster_frames = generate_monster(element)
     # for i, image_bytes in enumerate(monster_frames):
     #     with open(f"monster_{i}.png", "wb") as f:
     #         f.write(image_bytes.getbuffer())
     
-    generate_shard_spell("forest")
-    generate_planet_monster("testing123", "forest")
+    # generate_shard_spell("forest")
+    # generate_planet_monster("testing123", "forest")

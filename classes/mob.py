@@ -7,13 +7,17 @@ from classes.constants import *
 class Mob(pygame.sprite.Sprite):
     def __init__(self, health, speed, biome, planet_id, x=0, y=0):
         super().__init__()
+        
+        self.biome = biome
+        self.planet_id = planet_id
+        
         self.sprites = [
             pygame.transform.scale(
-                pygame.image.load("assets/monsters/monster_0.png").convert_alpha(),
+                pygame.image.load(f"assets/monsters/monster_{0}_{self.biome}_{self.planet_id}.png").convert_alpha(),
                 (80, 80),
             ),
             pygame.transform.scale(
-                pygame.image.load("assets/monsters/monster_1.png").convert_alpha(),
+                pygame.image.load(f"assets/monsters/monster_{1}_{self.biome}_{self.planet_id}.png").convert_alpha(),
                 (80, 80),
             ),
         ]
@@ -41,10 +45,10 @@ class Mob(pygame.sprite.Sprite):
 
 class MobFactory:
     @staticmethod
-    def create_mob(mob_type, x=0, y=0):
+    def create_mob(mob_type, biome, planet_id, x=0, y=0):
         if mob_type == "fast":
-            return Mob(health=10, speed=5, type=1, width=20, height=10, x=x, y=y)
+            return Mob(health=10, speed=5, biome=biome, planet_id=planet_id, x=x, y=y)
         elif mob_type == "strong":
-            return Mob(health=40, speed=2, type=1, width=20, height=10, x=x, y=y)
+            return Mob(health=40, speed=2, biome=biome, planet_id=planet_id, x=x, y=y)
         else:
-            return Mob(health=20, speed=3, type=0, width=20, height=10, x=x, y=y)
+            return Mob(health=20, speed=3, biome=biome, planet_id=planet_id, x=x, y=y)
