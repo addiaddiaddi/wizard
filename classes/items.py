@@ -3,24 +3,14 @@ import random
 
 from classes.constants import *
 
-tileset = pygame.image.load('assets/gfx/wizard_full.png')
-
 class Shard(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, biome, x, y):
         super().__init__()
-        self.image = pygame.Surface((32, 32))
-        self.image.fill((random.randint(0,255),random.randint(0,255), random.randint(0,255)))
         
-        self.type = 'forest'
-        self.tile_width = 32
+        self.biome = biome
+        self.image = pygame.transform.scale(pygame.image.load(f'assets/shards/shard_{self.biome}.png').convert_alpha(), (80, 80))
         
-        self.name = "Retard Shard"
-        self.image.blit(tileset, (0, 0), (random.randint(0,15) * 32, 42 * 32, 32, 32))
-        self.rect = self.image.get_rect()
-        
-        options = ['forest', 'lava', 'ice', 'river', 'gold']
-        
-        self.biome = random.choice(options)
+        self.rect = self.image.get_rect(center=(x, y))
         
         
     def draw(self, screen, coord_x, coord_y):

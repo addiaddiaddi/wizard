@@ -10,10 +10,6 @@ class Inventory():
         self.shards = pygame.sprite.Group()
         
         self.counts = {}
-        for i in range(5):
-            shard = Shard()
-            self.shards.add(shard)
-            self.counts[shard] = random.randint(0,25)
             
         self.slots = (10,3)  # Number of inventory slots
         self.slot_size = (50, 50)  # Width and height of each slot

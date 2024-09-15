@@ -6,19 +6,20 @@ from classes.constants import *
 from .particle import Particle
 
 class Spell(pygame.sprite.Sprite):
-    def __init__(self, x, y, mouse_pos, speed=10, direction_offset=0, chain_explosion_types=None):
+    def __init__(self, x, y, mouse_pos, biome="electricity", power_level=1, speed=10, direction_offset=0, chain_explosion_types=None):
         super().__init__()
         
         # Load spell images (assuming they are named sprite_1.png, sprite_2.png, sprite_3.png)
         self.sprites = [
-            pygame.transform.scale(pygame.image.load('assets/spells/spell_0.png').convert_alpha(), (100, 100)),
-            pygame.transform.scale(pygame.image.load('assets/spells/spell_1.png').convert_alpha(), (100, 100)),
-            pygame.transform.scale(pygame.image.load('assets/spells/spell_2.png').convert_alpha(), (100, 100)),
+            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_{0}_{biome}.png').convert_alpha(), (100, 100)),
+            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_{1}_{biome}.png').convert_alpha(), (100, 100)),
+            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_{2}_{biome}.png').convert_alpha(), (100, 100)),
         ]
         
         self.explosion_sprite = pygame.transform.scale(
-            pygame.image.load('assets/spells/spell_explosion.png'
+            pygame.image.load(f'assets/spells/spell_explosion_{biome}.png'
         ).convert_alpha(), (120, 120))
+        
         self.explosion_sprite = pygame.transform.rotate(
             self.explosion_sprite, random.randint(30, 300)
         )

@@ -78,7 +78,6 @@ def generate_planet(element):
         res = await generate_image(dalle_prompt)
         return res
     res = asyncio.run(generate_planet_async(element))
-    print(res)
     return res
 
 def generate_shard(element):
@@ -90,29 +89,57 @@ def generate_shard(element):
     return res
 
 # entry point
-async def generate_assets(id, element):
-    pass
-
-if __name__ == "__main__":
-    element = "water"
-    """
+def generate_shard_spell(element):
     frames, explosion = generate_spell(element)
     
     for i, image_bytes in enumerate(frames):
-        with open(f"assets/spells/spell_{i}.png", "wb") as f:
+        with open(f"assets/spells/spell_{i}_{element}.png", "wb") as f:
             f.write(image_bytes.getbuffer())
             
-    with open(f"assets/spells/spell_explosion.png", "wb") as f:
+    with open(f"assets/spells/spell_explosion_{element}.png", "wb") as f:
         f.write(explosion.getbuffer())
         
+    with open(f"assets/shards/shard_{element}.png", "wb") as f:
+        f.write(generate_shard(element).getbuffer())
+    
+    return
+
+def generate_planet_monster(id, element):
+    with open(f"assets/planets/planet_{element}_{id}.png", "wb") as f:
+        f.write(generate_planet(element).getbuffer())
+        
+    monster_frames = generate_monster(element)
+    for i, image_bytes in enumerate(monster_frames):
+        with open(f"assets/monsters/monster_{i}_{element}_{id}.png", "wb") as f:
+            f.write(image_bytes.getbuffer())
+            
+    return 
+
+
+if __name__ == "__main__":
+    element = "electricity"
+    
+    """ 
     with open(f"assets/planets/planet_{element}.png", "wb") as f:
         f.write(generate_planet(element).getbuffer())
         
     with open(f"assets/shards/shard_{element}.png", "wb") as f:
         f.write(generate_shard(element).getbuffer())
     """
-
-    monster_frames = generate_monster(element)
-    for i, image_bytes in enumerate(monster_frames):
-        with open(f"monster_{i}.png", "wb") as f:
+    
+    frames, explosion = generate_spell(element)
+    
+    for i, image_bytes in enumerate(frames):
+        with open(f"assets/spells/spell_{i}_{element}.png", "wb") as f:
             f.write(image_bytes.getbuffer())
+    
+    with open(f"assets/spells/spell_explosion_{element}.png", "wb") as f:
+        f.write(explosion.getbuffer())
+
+    # monster_frames = generate_monster(element)
+    # for i, image_bytes in enumerate(monster_frames):
+    #     with open(f"monster_{i}.png", "wb") as f:
+    #         f.write(image_bytes.getbuffer())
+    
+    # generate_shard_spell("forest")
+    # generate_planet_monster("testing123", "forest")
