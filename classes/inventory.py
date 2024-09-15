@@ -21,6 +21,22 @@ class Inventory():
         self.inventory_surface = pygame.Surface((self.slots[0] * (self.slot_size[0] + self.slot_margin) - self.slot_margin, 
                                                  self.slots[1] * (self.slot_size[1] + self.slot_margin) - self.slot_margin))
         self.inventory_surface.fill(GRAY)  # Background color of the inventory bar
+        self.selected_item = None  # Track the selected item
+
+    def handle_click(self, pos):
+        inventory_x = (WIDTH - self.inventory_surface.get_width()) // 2
+        inventory_y = HEIGHT - self.slot_size[1] - 300
+        self.selected_item = None
+        for i in range(self.slots[0]):
+            for j in range(self.slots[1]):
+                slot_x = inventory_x + i * (self.slot_size[0] + self.slot_margin)
+                slot_y = inventory_y + j * (self.slot_size[1] + self.slot_margin)
+                slot_rect = pygame.Rect(slot_x, slot_y, self.slot_size[0], self.slot_size[1])
+                if slot_rect.collidepoint(pos):
+                    item_idx = j * self.slots[0] + i
+                    if item_idx < len(self.shards.sprites()):
+                        self.selected_item = self.shards.sprites()[item_idx]
+                        return  # Exit after the first match
 
     def draw(self, surface):
         # Draw the inventory surface
@@ -50,8 +66,25 @@ class Inventory():
                     text_y = slot_y + self.slot_size[1] - count_text.get_height()  # Position text at the bottom of the slot
                     surface.blit(count_text, (text_x, text_y))  # Draw the text on the surface
 
-    def add_shard(self, shard):
+                    if self.selected_item == item:
+                        pygame.draw.rect(surface, RED, (slot_x, slot_y, self.slot_size[0], self.slot_size[1]), 4)  # Highlight selected item
+        self.handle_click(pygame.mouse.get_pos())
+    def add_shard(self, shard, count=None):
         
         self.shards.add(shard)
         
-        self.counts[shard] = self.counts.get(shard, 0) + 1
+        if count is None:
+            self.counts[shard] = self.counts.get(shard, 0) + 1
+        else:
+            self.counts[shard] = count
+            
+    def remove_shard(self, shard):
+        
+        self.shards.remove(shard)
+        
+        print(shard)
+        count = self.counts[shard]
+        del self.counts[shard]
+        
+        self.selected_item = None
+        return count

@@ -28,7 +28,7 @@ def draw_healthbars(wizard, mobs, screen, offset_x, offset_y):
         pygame.draw.rect(screen, RED, (mob.rect.x - offset_x, mob.rect.y - 10 - offset_y, health_bar_width, 5))
         pygame.draw.rect(screen, GREEN, (mob.rect.x - offset_x, mob.rect.y - 10 - offset_y, health_bar_fill, 5))
         
-    health_bar_width = wizard.image.get_width()
+    health_bar_width = 128
     health_ratio = wizard.health / wizard.max_health
     health_bar_fill = health_bar_width * health_ratio
     pygame.draw.rect(screen, RED, (wizard.rect.x - offset_x, wizard.rect.y - 10 - offset_y, health_bar_width, 5))
