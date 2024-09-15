@@ -31,15 +31,25 @@ def home_screen():
     label_font = pygame.font.Font(None, 40)  # Font for the label
 
     # Create text surfaces
-    title_text = title_font.render("Wizard Game", True, (255, 255, 255))  # White text for space theme
-    start_text = button_font.render("Start Game", True, (255, 255, 255))
-    exit_text = button_font.render("Exit", True, (255, 255, 255))
+    # title_text = title_font.render("Wizard Game", True, (255, 255, 255))  # White text for space theme
+    logo_image = pygame.image.load("assets/misc/logo.png").convert_alpha()
+    start_original = pygame.image.load("assets/misc/start.png").convert_alpha()
+    theme_original = pygame.image.load("assets/misc/theme.png").convert_alpha()
     
-    # Define button rectangles
-    start_button = start_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
-    exit_button = exit_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
+    start_width = start_original.get_width() // 3
+    start_height = start_original.get_height() // 3
+    theme_width = theme_original.get_width() // 3
+    theme_height = theme_original.get_height() // 3
+    
+    start_image = pygame.transform.scale(start_original, (start_width, start_height))
+    theme_image = pygame.transform.scale(theme_original, (theme_width, theme_height))
+    
+   
+    # # Define button rectangles
+    start_button = start_image.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
+    # exit_button = exit_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
 
-    # Text input box setup
+    # # Text input box setup
     input_box_rect = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 + 150, 300, 50)  # Input box rectangle
     input_text = ''  # Text the player types
     input_active = False  # Whether the input box is active (clicked)
@@ -65,12 +75,14 @@ def home_screen():
         draw_stars(screen, num_stars=150)
         
         # Draw title and buttons
-        screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 100))
-        screen.blit(start_text, start_button)
-        screen.blit(exit_text, exit_button)
+        # screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 100))
+        
+        screen.blit(logo_image, (WIDTH // 2 - logo_image.get_width() // 2, 100))
+        screen.blit(start_image, start_button)
+        # screen.blit(exit_text, exit_button)
         
         # Draw the label for the text box
-        screen.blit(label_text, (input_box_rect.x, input_box_rect.y - 40))
+        screen.blit(theme_image, (input_box_rect.x, input_box_rect.y - 40))
         
         # Draw the text input box
         pygame.draw.rect(screen, box_color, input_box_rect, 2)
@@ -100,9 +112,6 @@ def home_screen():
                     biome_type = input_text  # Save the typed biome type
                     print(f"Starting game with biome type: {biome_type}")  # Print the biome type
                     return biome_type  # Return the biome type for use in the game
-                elif exit_button.collidepoint(event.pos):
-                    pygame.quit()
-                    sys.exit()  # Exit the game
 
             elif event.type == pygame.KEYDOWN:
                 if input_active:
