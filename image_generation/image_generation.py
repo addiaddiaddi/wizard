@@ -89,6 +89,10 @@ def generate_shard(element):
     res = asyncio.run(generate_shard_async(element))
     return res
 
+# entry point
+async def generate_assets(id, element):
+    pass
+
 if __name__ == "__main__":
     element = "water"
     """
