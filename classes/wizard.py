@@ -119,8 +119,6 @@ class Wizard(pygame.sprite.Sprite):
                 else:
                     # Set the attack frame
                     self.image = self.animations[attack_animation_key][self.attack_frame_index]
-                    
-            return
 
 
         # Movement controls
@@ -142,15 +140,16 @@ class Wizard(pygame.sprite.Sprite):
             is_moving = True
 
         # Handle animation only if moving
-        if is_moving:
-            self.frame_counter += self.animation_speed
-            if self.frame_counter >= 1:
-                self.frame_counter = 0
-                self.frame_index = (self.frame_index + 1) % len(self.animations[self.current_direction])
+        if not self.is_attacking:
+            if is_moving:
+                self.frame_counter += self.animation_speed
+                if self.frame_counter >= 1:
+                    self.frame_counter = 0
+                    self.frame_index = (self.frame_index + 1) % len(self.animations[self.current_direction])
+                    self.image = self.animations[self.current_direction][self.frame_index]
+            else:
+                self.frame_index = 0
                 self.image = self.animations[self.current_direction][self.frame_index]
-        else:
-            self.frame_index = 0
-            self.image = self.animations[self.current_direction][self.frame_index]
 
         # Attack logic
         if keys[pygame.K_SPACE]:

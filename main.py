@@ -144,8 +144,6 @@ font_path = "assets/misc/pixelfont.otf"  # Path to the Star Wars font file
 font_size = 60  # Set the font size
 font = pygame.font.Font(font_path, font_size)
 
-
-font_path = "assets/misc/otherfont.ttf"  # Path to the Star Wars font file
 score_font = pygame.font.Font(font_path, font_size)
 
 def draw_star_wars_text(screen, text, font, color, speed=2):
