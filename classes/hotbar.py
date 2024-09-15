@@ -5,7 +5,10 @@ from classes.constants import *
 class Hotbar:
     def __init__(self):
         self.selected_slot = 0
-        self.spell_types = [["normal"], ["cone"], ["circular"], ["normal", "cone"], ["normal", "circular"], ["cone", "circular"]]
+        self.spell_types = [("electricity", 1)]
+    
+    def add_spell(self, biome, level):
+        self.spell_types.append((biome, level))
 
     def select_slot(self, slot):
         if 0 <= slot < len(self.spell_types):
@@ -17,7 +20,7 @@ class Hotbar:
     def draw(self, surface):
         for i, _ in enumerate(self.spell_types):
             color = YELLOW if i == self.selected_slot else GRAY
-            pygame.draw.rect(surface, color, (50 + i * 60, surface.get_height() - 60, 50, 50))
+            pygame.draw.rect(surface, color, (50 + i * 60, surface.get_height() - 300, 50, 50))
             font = pygame.font.Font(None, 36)
             text = font.render(f"{i+1}", True, WHITE)
-            surface.blit(text, (65 + i * 60, surface.get_height() - 55))
+            surface.blit(text, (65 + i * 60, surface.get_height() - 295))

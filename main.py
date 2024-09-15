@@ -173,6 +173,7 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             keydown = True
+            
             # Check number keys (1-9) for hotbar selection
             if pygame.K_1 <= event.key <= pygame.K_9:
                 hotbar.select_slot(event.key - pygame.K_1)
@@ -188,30 +189,22 @@ while running:
                     )
                     last_spell_time = current_time  # Update the last spell fire time
             
-            if pygame.key.get_pressed()[pygame.K_e]:
+            if event.key == pygame.K_e:
                 inventory_showing = not inventory_showing
             
-            if pygame.key.get_pressed()[pygame.K_r]:
-                process = subprocess.Popen(
-                    ['python', 'image_generation/image_generation.py'],  # Replace with your command
-                    stdout=sys.stdout,
-                    stderr=sys.stdout
-                )
+            if event.key == pygame.K_c:
+                if inventory_showing and active_crafter is not None:
+                    crafter.craft(inventory, hotbar)
                 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            crafter.select(inventory)
+            mouse_pos = pygame.mouse.get_pos()
+            inventory.handle_click(mouse_pos)
     
     crafting_collision = pygame.sprite.groupcollide(wizard_group, crafter_group, False, False)
-    
     if crafting_collision != {}:
         active_crafter = crafting_collision[wizard][0]
-        inventory_showing = True
-    elif pygame.key.get_pressed()[pygame.K_e] and keydown:
-        inventory_showing = not inventory_showing
-    elif crafting_collision == {}:
-        if active_crafter is not None:
-            active_crafter = None
-            inventory_showing = False
+    else:
+        active_crafter = None
 
     # Update game objects
     keys = pygame.key.get_pressed()
@@ -249,11 +242,9 @@ while running:
         print("GAME OVER")
         running = False
 
-    pickups = pygame.sprite.groupcollide(wizard_group, dropped_shards, False, True)
+    pickups = pygame.sprite.groupcollide(wizard_group, dropped_shards, False, False)
     for shard in pickups.get(wizard,[]):
         inventory.add_shard(shard)
-        
-        
         
     # Draw everything
     screen.fill(BLACK)
@@ -264,14 +255,15 @@ while running:
     
     planet_manager.draw_planets(wizard.rect.x, wizard.rect.y, screen, offset_x, offset_y)
     planet_manager.mob_gen(wizard.rect.x, wizard.rect.y)
+    
     # Draw hotbar
     hotbar.draw(screen,)
 
     if inventory_showing:
         inventory.draw(screen)
         
-    if active_crafter is not None:
-        active_crafter.draw(screen, inventory)
+        if active_crafter is not None:
+            active_crafter.draw(screen, inventory)
 
     pygame.display.flip()
 

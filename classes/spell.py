@@ -6,7 +6,7 @@ from classes.constants import *
 from .particle import Particle
 
 class Spell(pygame.sprite.Sprite):
-    def __init__(self, x, y, mouse_pos, biome="electricity", power_level=1, speed=10, direction_offset=0, chain_explosion_types=None):
+    def __init__(self, x, y, mouse_pos, biome, speed=10, direction_offset=0, chain_explosion_types=None):
         super().__init__()
         
         # Load spell images (assuming they are named sprite_1.png, sprite_2.png, sprite_3.png)
@@ -15,6 +15,8 @@ class Spell(pygame.sprite.Sprite):
             pygame.transform.scale(pygame.image.load(f'assets/spells/spell_{1}_{biome}.png').convert_alpha(), (100, 100)),
             pygame.transform.scale(pygame.image.load(f'assets/spells/spell_{2}_{biome}.png').convert_alpha(), (100, 100)),
         ]
+        
+        self.biome = biome
         
         self.explosion_sprite = pygame.transform.scale(
             pygame.image.load(f'assets/spells/spell_explosion_{biome}.png'
@@ -67,9 +69,10 @@ class Spell(pygame.sprite.Sprite):
         # Check for chain explosion
         if len(self.chain_explosion_types) > 0 and (self.distance_traveled >= self.explosion_threshold or hit):
             SpellFactory.create_spell(
-                self.chain_explosion_types,
+                (self.biome, -1),
                 self.rect.centerx, self.rect.centery,
-                (self.rect.centerx + self.velocity_x, self.rect.centery + self.velocity_y)
+                (self.rect.centerx + self.velocity_x, self.rect.centery + self.velocity_y),
+                chain=self.chain_explosion_types
             )
             
             self.explode()
@@ -110,9 +113,30 @@ class Spell(pygame.sprite.Sprite):
 
 class SpellFactory:
     @staticmethod
-    def create_spell(spell_chain, x, y, mouse_pos):
+    def get_spell_chain(level):
+        if level == 1:
+            return ["normal"]
+        elif level == 2:
+            return ["cone"]
+        elif level == 3:
+            return ["circular"]
+        elif level == 4:
+            return ["normal", "cone"]
+        elif level == 5:
+            return ["normal", "circular"]
+        elif level >= 6:
+            return ["cone", "circular"]
+        
+    
+    @staticmethod
+    def create_spell(selected_spell, x, y, mouse_pos, chain=None):
+        spell_biome = selected_spell[0]
+        spell_level = selected_spell[1]
+        
+        spell_chain = chain or SpellFactory.get_spell_chain(spell_level)
+        
         if spell_chain[0] == "normal":
-            spell = Spell(x, y, mouse_pos, chain_explosion_types=spell_chain[1:])
+            spell = Spell(x, y, mouse_pos, spell_biome, chain_explosion_types=spell_chain[1:])
             all_sprites.add(spell)
             spells.add(spell)
         
@@ -121,6 +145,7 @@ class SpellFactory:
                 random_noise = random.uniform(-10, 10)
                 spell = Spell(
                     x, y, mouse_pos,
+                    spell_biome,
                     speed=10,
                     direction_offset=angle + random_noise,
                     chain_explosion_types=spell_chain[1:]
@@ -134,6 +159,7 @@ class SpellFactory:
                 random_noise = random.uniform(-15, 15)
                 spell = Spell(
                     x, y, mouse_pos,
+                    spell_biome,
                     speed=10,
                     direction_offset=angle + random_noise,
                     chain_explosion_types=spell_chain[1:]
