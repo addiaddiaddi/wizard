@@ -10,6 +10,7 @@ from classes.utilities import get_camera_offset, draw_sprites, draw_healthbars
 from classes.constants import *
 from classes.inventory import Inventory
 from classes.items import Shard
+from classes.crafter import Crafter
 
 # Initialize Pygame
 pygame.init()
@@ -17,24 +18,16 @@ pygame.init()
 # Screen dimensions
 WIDTH, HEIGHT = 32*32, 32*32
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Wizard vs Mobs")
+pygame.display.set_caption("Wizard")
 
-# Instantiate wizard
-        
-# Create sprite groups
-# Instantiate wizard
 wizard = Wizard(WIDTH, HEIGHT)
 
+crafter = Crafter()
+crafter_group.add(crafter)
 
-# Game clock
-# clock = pygame.time.Clock()
-
-# Create sprite groups
-# all_sprites = pygame.sprite.Group()
-# spells = pygame.sprite.Group()
-# mobs = pygame.sprite.Group()
-# wizard_group = pygame.sprite.Group()
-
+crafter.rect.x = wizard.rect.x
+crafter.rect.y = wizard.rect.y
+all_sprites.add(crafter)
 
 inventory = Inventory()
 wizard_group.add(wizard)
@@ -53,10 +46,14 @@ inventory_showing = False
 
 while running:
     clock.tick(60)
+    offset_x, offset_y = get_camera_offset(screen, wizard)
+        
+    keydown = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
+            keydown = True
             # Check number keys (1-9) for hotbar selection
             if pygame.K_1 <= event.key <= pygame.K_9:
                 hotbar.select_slot(event.key - pygame.K_1)
@@ -66,14 +63,21 @@ while running:
                 mouse_pos = pygame.mouse.get_pos()
                 selected_spell = hotbar.get_selected_spell()
                 SpellFactory.create_spell(selected_spell, wizard.rect.centerx, wizard.rect.centery, mouse_pos)
-
-            if pygame.key.get_pressed()[pygame.K_e]:
-                inventory_showing = not inventory_showing
-                
-    offset_x, offset_y = get_camera_offset(screen, wizard)
-
-
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            crafter.select(inventory)
     
+    crafting_collission = pygame.sprite.groupcollide(wizard_group, crafter_group, False, False)
+    
+    if crafting_collission != {}:
+        active_crafter = crafting_collission[wizard][0]
+        inventory_showing = True
+    elif pygame.key.get_pressed()[pygame.K_e] and keydown:
+        inventory_showing = not inventory_showing
+    elif crafting_collission == {}:
+        if active_crafter is not None:
+            active_crafter = None
+            inventory_showing = False
+
     # Spawn mobs randomly
     if random.randint(1, 100) < 3:
         mob = MobFactory.create_mob(random.choice(["fast", "strong", "normal"]))
@@ -115,6 +119,8 @@ while running:
     for shard in pickups.get(wizard,[]):
         inventory.add_shard(shard)
         
+        
+        
     # Draw everything
     screen.fill(BLACK)
     tiles.draw_tiles(screen, offset_x, offset_y)
@@ -126,6 +132,9 @@ while running:
 
     if inventory_showing:
         inventory.draw(screen)
+        
+    if active_crafter is not None:
+        active_crafter.draw(screen, inventory)
 
     pygame.display.flip()
 

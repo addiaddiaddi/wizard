@@ -14,6 +14,10 @@ class Shard(pygame.sprite.Sprite):
         self.image.blit(self.tileset, (0, 0), (random.randint(0,15) * 32, 42 * 32, 32, 32))
         self.rect = self.image.get_rect()
         
+        options = ['forest', 'lava', 'ice', 'river', 'gold']
+        
+        self.biome = random.choice(options)
+        
         
     def draw(self, screen, coord_x, coord_y):
         screen.blit(self.image, (coord_x, coord_y))

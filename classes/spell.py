@@ -12,7 +12,7 @@ class Spell(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.speed = speed
-        dx, dy = mouse_pos[0] - x, mouse_pos[1] - y
+        dx, dy = mouse_pos[0] - x , mouse_pos[1] - y 
         angle = math.atan2(dy, dx) + math.radians(direction_offset)
         self.velocity_x = self.speed * math.cos(angle)
         self.velocity_y = self.speed * math.sin(angle)
