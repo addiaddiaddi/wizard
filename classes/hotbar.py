@@ -1,6 +1,7 @@
 import pygame
 
 from classes.constants import *
+from classes.utilities import load_sprite
 
 class Hotbar:
     def __init__(self):
@@ -18,9 +19,9 @@ class Hotbar:
         return self.spell_types[self.selected_slot]
 
     def draw(self, surface):
-        for i, _ in enumerate(self.spell_types):
-            color = YELLOW if i == self.selected_slot else GRAY
-            pygame.draw.rect(surface, color, (50 + i * 60, surface.get_height() - 300, 50, 50))
-            font = pygame.font.Font(None, 36)
-            text = font.render(f"{i+1}", True, WHITE)
-            surface.blit(text, (65 + i * 60, surface.get_height() - 295))
+        for i, spell_data in enumerate(self.spell_types):
+            color = GREEN if i == self.selected_slot else GRAY
+            pygame.draw.rect(surface, color, (50 + i * 60, surface.get_height() - 300, 50, 50), 2, 8)
+            surface.blit(pygame.transform.scale(
+                load_sprite(f'assets/shards/shard_{spell_data[0]}.png'), (50, 50)
+            ), (50 + i * 60, surface.get_height() - 300))
