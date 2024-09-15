@@ -63,7 +63,9 @@ def home_screen():
     box_color = box_color_inactive
 
     # Load or generate a space background
-    background_image = pygame.image.load("background_0.png").convert()  # Replace with your space image
+    background_image = pygame.transform.scale(
+        pygame.image.load("background.png").convert(), (1024, 1024)
+    )  # Replace with your space image
     
     # Home screen loop
     biome_type = None  # Variable to store the biome type
@@ -163,6 +165,8 @@ inventory_showing = False
 
 planet_manager = PlanetManager(wizard.rect.x, wizard.rect.y)
 while running:
+    game_started = True
+    
     clock.tick(60)
     offset_x, offset_y = get_camera_offset(screen, wizard)
         

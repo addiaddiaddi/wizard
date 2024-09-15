@@ -3,6 +3,7 @@ import math
 import random
 
 from classes.constants import *
+from classes.utilities import load_sprite
 from .particle import Particle
 
 class Spell(pygame.sprite.Sprite):
@@ -11,16 +12,16 @@ class Spell(pygame.sprite.Sprite):
         
         # Load spell images (assuming they are named sprite_1.png, sprite_2.png, sprite_3.png)
         self.sprites = [
-            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_0_{biome}.png').convert_alpha(), (100, 100)),
-            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_1_{biome}.png').convert_alpha(), (100, 100)),
-            pygame.transform.scale(pygame.image.load(f'assets/spells/spell_2_{biome}.png').convert_alpha(), (100, 100)),
+            pygame.transform.scale(load_sprite(f'assets/spells/spell_0_{biome}.png'), (100, 100)),
+            pygame.transform.scale(load_sprite(f'assets/spells/spell_1_{biome}.png'), (100, 100)),
+            pygame.transform.scale(load_sprite(f'assets/spells/spell_2_{biome}.png'), (100, 100)),
         ]
         
         self.biome = biome
         
         self.explosion_sprite = pygame.transform.scale(
-            pygame.image.load(f'assets/spells/spell_explosion_{biome}.png'
-        ).convert_alpha(), (120, 120))
+            load_sprite(f'assets/spells/spell_explosion_{biome}.png'
+        ), (120, 120))
         
         self.explosion_sprite = pygame.transform.rotate(
             self.explosion_sprite, random.randint(30, 300)

@@ -26,3 +26,6 @@ dropped_shards = pygame.sprite.Group()
 crafter_group =pygame.sprite.Group()
 particles = pygame.sprite.Group()
 planet_group = pygame.sprite.Group()
+
+sprite_preloader = {}
+game_started = False

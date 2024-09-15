@@ -22,12 +22,13 @@ class Tiles:
         # Blit the 9 images into the combined image at their correct positions
         for i in range(9):
             # img = environment.get_environments.get_background(i)
-            img = pygame.image.load(f"background_{i+1}.png")
+            img = pygame.image.load(f"background.png")
+            img = pygame.transform.scale(img, (1024, 1024))
             # img = pygame.image.load(img) 
 
             row = i // 3  # Determine the row in the 3x3 grid
             col = i % 3   # Determine the column in the 3x3 grid
-            print(f"Blitting image {i} at position {(col * 1024, row * 1024)}")  # Debug print for blit positions
+            # print(f"Blitting image {i} at position {(col * 1024, row * 1024)}")  # Debug print for blit positions
             self.combined_image.blit(img, (col * 1024, row * 1024))  # Blit image to its place in the 3x3 grid
 
         self.tile_width = 32

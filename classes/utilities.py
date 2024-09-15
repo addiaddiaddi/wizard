@@ -1,6 +1,12 @@
 import pygame
 
-from classes.constants import RED, GREEN
+from classes.constants import RED, GREEN, sprite_preloader, game_started
+
+def load_sprite(url):    
+    if sprite_preloader.get(url) is None:
+        sprite_preloader[url] = pygame.image.load(url).convert_alpha()
+
+    return sprite_preloader[url]
 
 def get_camera_offset(screen, wizard):
     screen_center_x = screen.get_width() // 2
@@ -13,7 +19,7 @@ def draw_sprites(all_sprites, screen, offset_x, offset_y):
     for sprite in all_sprites:
         sprite.rect.x -= offset_x
         sprite.rect.y -= offset_y
-        
+   
     all_sprites.draw(screen)
     
     for sprite in all_sprites:

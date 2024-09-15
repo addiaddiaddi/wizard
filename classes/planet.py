@@ -80,7 +80,7 @@ class PlanetManager:
             dist_x = planet.x - player_x
             dist_y = planet.y - player_y
             distance = (dist_x**2 + dist_y**2) ** 0.5
-            if distance < 2000:
+            if distance < 1000:
                 planet.draw(screen, offset_x, offset_y)
 
     def mob_gen(self, player_x, player_y):
@@ -93,7 +93,7 @@ class PlanetManager:
                 continue
             # Probability of mob spawning inversely proportional to the planet's radius
             spawn_probability = (
-                planet.radius / 5000
+                planet.radius / 40000
             )  # Adjust the divisor to scale difficulty
             if random.random() < spawn_probability:
                 # Assuming a function create_mob() exists that creates and returns a mob object
