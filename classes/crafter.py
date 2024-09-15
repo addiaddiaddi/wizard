@@ -8,22 +8,23 @@ class Crafter(pygame.sprite.Sprite):
 
         self.CRAFTING_WIDTH, self.CRAFTING_HEIGHT = 5*32, 5*32
         self.crafting_surface = pygame.Surface((self.CRAFTING_WIDTH, self.CRAFTING_HEIGHT))
-        self.crafting_surface.fill(GRAY)
-        
+        self.crafting_surface.fill(WHITE)
+        self.crafting_surface.set_alpha(110)  # Set transparency level (0-255)
         self.crafting_rect = pygame.Rect(0, 0, self.CRAFTING_WIDTH, self.CRAFTING_HEIGHT)
         
         self.crafting_rect.x = (WIDTH - self.crafting_rect.width) // 2
         self.crafting_rect.y = (HEIGHT - self.crafting_rect.height) // 3
-        self.crafting_surface.fill(GRAY)
+        self.crafting_surface.fill(WHITE)
+        self.crafting_surface.set_alpha(110)  # Set transparency level (0-255)
         
         self.crafting_started = False
         
-        self.image = pygame.Surface((32, 32))
-        self.file = 'assets/gfx/wizard_full.png'
-        self.tile_width = 32
+        self.image = pygame.Surface((512, 512))
+        self.file = 'assets/misc/crafter.png'
+        self.tile_width = 512
         self.tileset = pygame.image.load(self.file)
-        self.image.blit(self.tileset, (0, 0), (58 * 32, 0 * 32, 32, 32))
-        self.image = pygame.transform.scale(self.image, (96, 96))
+        self.image.blit(self.tileset, (0, 0), (0,0, 512, 512))
+        self.image = pygame.transform.scale(self.image, (256, 256))
         self.rect = self.image.get_rect()
         
         self.slot_size = (50, 50)  # Width and height of each slot
@@ -36,7 +37,7 @@ class Crafter(pygame.sprite.Sprite):
         pygame.draw.rect(surface, BLACK, (slot_x, slot_y, self.slot_size[0], self.slot_size[1]), 2)
                 
         self.crafting_button_rect = pygame.Rect(self.crafting_rect.x, self.crafting_rect.y + self.CRAFTING_HEIGHT + 10, self.CRAFTING_WIDTH, 50)
-        pygame.draw.rect(surface, BLUE, self.crafting_button_rect) 
+        pygame.draw.rect(surface, (177,52,235), self.crafting_button_rect) 
        
         font = pygame.font.Font(None, 28)
         text = font.render('Press C to Craft', True, WHITE)

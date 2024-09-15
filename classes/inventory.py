@@ -13,9 +13,14 @@ class Inventory():
         self.slots = (10,3)  # Number of inventory slots
         self.slot_size = (50, 50)  # Width and height of each slot
         self.slot_margin = 10  # Margin between slots
+        
         self.inventory_surface = pygame.Surface((self.slots[0] * (self.slot_size[0] + self.slot_margin) - self.slot_margin, 
-                                                 self.slots[1] * (self.slot_size[1] + self.slot_margin) - self.slot_margin))
-        self.inventory_surface.fill(GRAY)  # Background color of the inventory bar
+                                                 self.slots[1] * (self.slot_size[1] + self.slot_margin) - self.slot_margin), pygame.SRCALPHA)
+        self.inventory_surface.fill(WHITE)  # Background color of the inventory bar
+        
+        self.inventory_surface.set_alpha(110)  # Set transparency level (0-255)
+        
+        
         self.selected_item = None  # Track the selected item
         
         self.inventory_array = []
