@@ -120,22 +120,21 @@ class Wizard(pygame.sprite.Sprite):
                     # Set the attack frame
                     self.image = self.animations[attack_animation_key][self.attack_frame_index]
 
-            return  # Skip movement updates during attack
 
         # Movement controls
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.rect.x -= self.speed
             self.current_direction = 'left'
             is_moving = True
-        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.rect.x += self.speed
             self.current_direction = 'right'
             is_moving = True
-        elif keys[pygame.K_UP] or keys[pygame.K_w]:
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
             self.rect.y -= self.speed
             self.current_direction = 'up'
             is_moving = True
-        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             self.rect.y += self.speed
             self.current_direction = 'down'
             is_moving = True
