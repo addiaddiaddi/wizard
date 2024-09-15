@@ -16,32 +16,32 @@ class Tiles:
         #         raise ValueError(f"Image {image_paths[i]} is not 1024x1024! Got {img.get_size()} instead.")
         
         # Create a surface to combine the 9 images into a 3x3 grid (3072x3072 total)
-        self.combined_image = pygame.Surface((1024 * 3, 1024 * 3))
+        self.combined_image = pygame.Surface((1024 * 16, 1024 * 16))
 
         
         # Blit the 9 images into the combined image at their correct positions
-        for i in range(9):
+        for i in range(16**2):
             # img = environment.get_environments.get_background(i)
             img = pygame.image.load(f"background.png")
             img = pygame.transform.scale(img, (1024, 1024))
             # img = pygame.image.load(img) 
 
-            row = i // 3  # Determine the row in the 3x3 grid
-            col = i % 3   # Determine the column in the 3x3 grid
+            row = i // 16  # Determine the row in the 3x3 grid
+            col = i % 16  # Determine the column in the 3x3 grid
             # print(f"Blitting image {i} at position {(col * 1024, row * 1024)}")  # Debug print for blit positions
             self.combined_image.blit(img, (col * 1024, row * 1024))  # Blit image to its place in the 3x3 grid
 
-        self.tile_width = 32
-        self.tiles_per_image_row = (1024 * 3) // self.tile_width  # Number of tiles per row in the 3072x3072 image
+        self.tile_width = 1024
+        self.tiles_per_image_row = (1024 * 16) // self.tile_width  # Number of tiles per row in the 3072x3072 image
 
         # Generate a tilemap with sequential tile IDs (non-random)
-        self.tilemap = []
-        for row in range(height // self.tile_width):
-            self.tilemap.append([])
-            for col in range(width // self.tile_width):
-                # Assign tile IDs in a sequential order
-                tile_id = (row * (width // self.tile_width) + col) % (self.tiles_per_image_row ** 2)
-                self.tilemap[row].append(tile_id)
+        # self.tilemap = []
+        # for row in range(height // self.tile_width):
+        #     self.tilemap.append([])
+        #     for col in range(width // self.tile_width):
+        #         # Assign tile IDs in a sequential order
+        #         tile_id = (row * (width // self.tile_width) + col) % (self.tiles_per_image_row ** 2)
+        #         self.tilemap[row].append(tile_id)
         pygame.image.save(self.combined_image, "combined_image_debug.png")
 
     def get_tile(self, row, col):
@@ -51,17 +51,17 @@ class Tiles:
         return tile
 
     def draw_tiles(self, screen, offset_x, offset_y):
-        TILE_SIZE = self.tile_width
-        for row_idx, row in enumerate(self.tilemap):
-            for col_idx, tile_id in enumerate(row):
-                # Determine the tile position within the combined image
-                tile_row = tile_id // self.tiles_per_image_row
-                tile_col = tile_id % self.tiles_per_image_row
+        # TILE_SIZE = self.tile_width
+        # for row_idx, row in enumerate(self.tilemap):
+        #     for col_idx, tile_id in enumerate(row):
+        #         # Determine the tile position within the combined image
+        #         tile_row = tile_id // self.tiles_per_image_row
+        #         tile_col = tile_id % self.tiles_per_image_row
                 
-                # Get the appropriate tile from the combined image
-                tile = self.get_tile(tile_row, tile_col)
-                screen.blit(tile, (col_idx * TILE_SIZE - offset_x, row_idx * TILE_SIZE - offset_y))
-
+        #         # Get the appropriate tile from the combined image
+        #         tile = self.get_tile(tile_row, tile_col)
+        #         screen.blit(tile, (col_idx * TILE_SIZE - offset_x - 2048, row_idx * TILE_SIZE - offset_y - 2048))
+        screen.blit(self.combined_image, (-1024*10 - offset_x / 2, -1024*10 - offset_y / 2))
 # import pygame
 # import environment.get_environments 
 # import pygame

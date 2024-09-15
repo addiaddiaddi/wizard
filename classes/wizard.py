@@ -29,7 +29,7 @@ class Wizard(pygame.sprite.Sprite):
         self.rect = pygame.Rect(0, 0, 64, 64)        
         self.rect.center = (width // 2, height // 2)
         
-        self.speed = 5
+        self.speed = 8
         self.max_health = 100
         self.health = self.max_health
         

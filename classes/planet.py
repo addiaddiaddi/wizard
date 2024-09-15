@@ -21,11 +21,13 @@ class PlanetManager:
         self.biome_list = []
 
         # Generate clusters of planets
-        num = 3
-        width = 3000
+        num = 25
+        width = 30000
 
         chunk_width = width // num
 
+
+        print('starting world gen')
         for i in range(num):
             for j in range(num):
 
@@ -45,7 +47,7 @@ class PlanetManager:
                 
                 planets = []
                 attempts = 0
-                max_attempts = 100
+                max_attempts = 10
                 
                 while len(planets) < N and attempts < max_attempts:
                     radius = random.randint(150, 500)
@@ -75,12 +77,14 @@ class PlanetManager:
                         # print(x, y, radius)
                     attempts += 1
 
+        print('stopping world gen')
+
     def draw_planets(self, player_x, player_y, screen, offset_x, offset_y):
         for planet in planet_group:
             dist_x = planet.x - player_x
             dist_y = planet.y - player_y
             distance = (dist_x**2 + dist_y**2) ** 0.5
-            if distance < 1000:
+            if distance < 1500:
                 planet.draw(screen, offset_x, offset_y)
 
     def mob_gen(self, player_x, player_y):

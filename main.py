@@ -84,7 +84,7 @@ def home_screen():
         # screen.blit(exit_text, exit_button)
         
         # Draw the label for the text box
-        screen.blit(theme_image, (input_box_rect.x, input_box_rect.y - 40))
+        screen.blit(theme_image, (input_box_rect.x - 20, input_box_rect.y - 40))
         
         # Draw the text input box
         pygame.draw.rect(screen, box_color, input_box_rect, 2)
@@ -199,7 +199,7 @@ inventory = Inventory()
 wizard_group.add(wizard)
 
 # Instantiate tiles
-tiles = Tiles(3*WIDTH, 3*HEIGHT)
+tiles = Tiles(8*1024, 8*1024)
 
 # Instantiate hotbar
 hotbar = Hotbar()
