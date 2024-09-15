@@ -36,7 +36,7 @@ wizard_group.add(wizard)
 all_sprites.add(wizard)
 
 # Instantiate tiles
-tiles = Tiles(WIDTH, HEIGHT)
+tiles = Tiles(3*WIDTH, 3*HEIGHT)
 
 # Instantiate hotbar
 hotbar = Hotbar()

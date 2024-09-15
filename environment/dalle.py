@@ -1,12 +1,15 @@
 from openai import OpenAI
 
-client = OpenAI()
 import requests
 import os
 
 # Initialize API Key
 
 # Function to query DALL·E
+
+print(os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 def query_dalle(prompt, image_size="1024x1024", n=1):
     try:
         # Generate image
