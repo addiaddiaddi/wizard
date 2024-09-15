@@ -101,9 +101,10 @@ if __name__ == "__main__":
     with open(f"assets/spells/spell_explosion.png", "wb") as f:
         f.write(explosion.getbuffer())
         
-    with open(f"planet_{element}.png", "wb") as f:
+    with open(f"assets/planets/planet_{element}.png", "wb") as f:
         f.write(generate_planet(element).getbuffer())
-    with open(f"shard.png", "wb") as f:
+        
+    with open(f"assets/shards/shard_{element}.png", "wb") as f:
         f.write(generate_shard(element).getbuffer())
     """
 

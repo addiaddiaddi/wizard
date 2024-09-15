@@ -33,7 +33,6 @@ all_sprites.add(crafter)
 
 inventory = Inventory()
 wizard_group.add(wizard)
-all_sprites.add(wizard)
 
 # Instantiate tiles
 tiles = Tiles(WIDTH, HEIGHT)
@@ -108,7 +107,9 @@ while running:
 
     # Update game objects
     keys = pygame.key.get_pressed()
-    wizard.update(keys)
+    
+    mouse_pos = pygame.mouse.get_pos()
+    wizard.update(keys, mouse_pos)
 
     spells.update()
     mobs.update(wizard.rect.center)
@@ -150,6 +151,7 @@ while running:
     # Draw everything
     screen.fill(BLACK)
     tiles.draw_tiles(screen, offset_x, offset_y)
+    wizard.draw(screen, offset_x, offset_y)
     draw_sprites(all_sprites, screen, offset_x, offset_y)
     draw_healthbars(wizard, mobs, screen, offset_x, offset_y)
 
