@@ -6,7 +6,7 @@ from classes.constants import *
 tileset = pygame.image.load('assets/gfx/wizard_full.png')
 
 class Shard(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, biome):
         super().__init__()
         self.image = pygame.Surface((32, 32))
         self.image.fill((random.randint(0,255),random.randint(0,255), random.randint(0,255)))
